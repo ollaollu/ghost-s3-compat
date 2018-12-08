@@ -15,39 +15,6 @@ class S3Store extends BaseAdapter {
         options = config;
     }
 
-     /**
-     * Return the URL where image assets can be read.
-     * @param  {String} bucket [AWS S3 bucket name]
-     * @return {String}        [path-style URL of the S3 bucket]
-     */
-    getAwsPath(bucket) {
-        var awsRegion = (options.region == 'us-east-1') ? 's3' : 's3-' + options.region;
-        var awsPath = options.assetHost ? options.assetHost : 'https://' + awsRegion + '.amazonaws.com/' + options.bucket + '/';
-        return awsPath;
-    }
-
-    logError(error) {
-        console.log('error in ghost-s3', error);
-    }
-    
-    logInfo(info) {
-        console.log('info in ghost-s3', info);
-    }
-
-    getTargetName(image, targetDir) {
-        var ext = path.extname(image.name);
-        var name = path.basename(image.name, ext).replace(/\W/g, '_');
-    
-        return targetDir + name + '-' + Date.now() + ext;
-    }
-
-    validOptions(opts) {
-        return (opts.accessKeyId &&
-            opts.secretAccessKey &&
-            opts.bucket &&
-            opts.region);
-    }
-
     save(image) {
         if (!validOptions(options)) {
           return Bluebird.reject('ghost-s3 is not configured');
@@ -122,7 +89,39 @@ class S3Store extends BaseAdapter {
     delete() {};
 
     read() {}
+}
 
+/**
+ * Return the URL where image assets can be read.
+ * @param  {String} bucket [AWS S3 bucket name]
+ * @return {String}        [path-style URL of the S3 bucket]
+ */
+function getAwsPath(bucket) {
+    var awsRegion = (options.region == 'us-east-1') ? 's3' : 's3-' + options.region;
+    var awsPath = options.assetHost ? options.assetHost : 'https://' + awsRegion + '.amazonaws.com/' + options.bucket + '/';
+    return awsPath;
+}
+
+function logError(error) {
+    console.log('error in ghost-s3', error);
+}
+
+function logInfo(info) {
+    console.log('info in ghost-s3', info);
+}
+
+function getTargetName(image, targetDir) {
+    var ext = path.extname(image.name);
+    var name = path.basename(image.name, ext).replace(/\W/g, '_');
+
+    return targetDir + name + '-' + Date.now() + ext;
+}
+
+function validOptions(opts) {
+    return (opts.accessKeyId &&
+        opts.secretAccessKey &&
+        opts.bucket &&
+        opts.region);
 }
 
 module.exports = S3Store;
