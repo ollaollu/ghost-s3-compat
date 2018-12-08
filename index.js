@@ -48,7 +48,7 @@ class S3Store extends BaseAdapter {
             opts.region);
     }
 
-    save = function save(image) {
+    save(image) {
         if (!validOptions(options)) {
           return Bluebird.reject('ghost-s3 is not configured');
         }
@@ -89,7 +89,7 @@ class S3Store extends BaseAdapter {
             });
     };
 
-    serve = function serve() {
+    serve() {
         var s3 = new AWS.S3({
             accessKeyId: options.accessKeyId,
             secretAccessKey: options.secretAccessKey,
