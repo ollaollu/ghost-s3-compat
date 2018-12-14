@@ -56,7 +56,11 @@ class S3Store extends BaseAdapter {
             });
     };
 
-    serve() {
+    serve () {
+        return (req, res, next) => next()
+    }
+
+    read(options) {
         var s3 = new AWS.S3({
             accessKeyId: options.accessKeyId,
             secretAccessKey: options.secretAccessKey,
@@ -87,8 +91,6 @@ class S3Store extends BaseAdapter {
     exists() {};
 
     delete() {};
-
-    read() {}
 }
 
 /**
